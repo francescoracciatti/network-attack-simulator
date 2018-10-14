@@ -1,11 +1,14 @@
+#Actually not used
+
 cmake_minimum_required(VERSION 3.12)
 project(attack_simulator_net)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(inet4/src/inet)
+include_directories(inet4/src/inet/omnetpp/include)
+include_directories(inet4/src/inet/omnetpp/include/omnetpp)
 include_directories(inet4/src/inet/applications/base)
-include_directories(inet4/src/inet/applications/common)
 include_directories(inet4/src/inet/applications/dhcp)
 include_directories(inet4/src/inet/applications/ethernet)
 include_directories(inet4/src/inet/applications/generic)
@@ -23,10 +26,12 @@ include_directories(inet4/src/inet/applications/tunapp)
 include_directories(inet4/src/inet/applications/udpapp)
 include_directories(inet4/src/inet/applications/voip)
 include_directories(inet4/src/inet/applications/voipstream)
+include_directories(inet4/src/inet/attackengine)
+include_directories(inet4/src/inet/attackengine/model)
+include_directories(inet4/src/inet/attackengine/model/event)
 include_directories(inet4/src/inet/common)
 include_directories(inet4/src/inet/common/checksum)
 include_directories(inet4/src/inet/common/figures)
-include_directories(inet4/src/inet/common/geometry)
 include_directories(inet4/src/inet/common/geometry/base)
 include_directories(inet4/src/inet/common/geometry/common)
 include_directories(inet4/src/inet/common/geometry/container)
@@ -186,7 +191,6 @@ include_directories(inet4/src/inet/routing/pim/tables)
 include_directories(inet4/src/inet/routing/rip)
 include_directories(inet4/src/inet/transportlayer/base)
 include_directories(inet4/src/inet/transportlayer/common)
-include_directories(inet4/src/inet/transportlayer/contract)
 include_directories(inet4/src/inet/transportlayer/contract/sctp)
 include_directories(inet4/src/inet/transportlayer/contract/tcp)
 include_directories(inet4/src/inet/transportlayer/contract/udp)
@@ -199,12 +203,6 @@ include_directories(inet4/src/inet/transportlayer/tcp/flavours)
 include_directories(inet4/src/inet/transportlayer/tcp_common)
 include_directories(inet4/src/inet/transportlayer/tcp_common/headers)
 include_directories(inet4/src/inet/transportlayer/tcp_lwip)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip)
-include_directories(inet4/src/inet/transportlayer/tcp_lwip/lwip/include/netif)
 include_directories(inet4/src/inet/transportlayer/tcp_lwip/queues)
 include_directories(inet4/src/inet/transportlayer/tcp_nsc)
 include_directories(inet4/src/inet/transportlayer/tcp_nsc/queues)
@@ -222,31 +220,18 @@ include_directories(inet4/src/inet/visualizer/scene)
 include_directories(inet4/src/inet/visualizer/transportlayer)
 include_directories(inet4/src/inet/visualizer/util)
 include_directories(inet4/tests/misc/dlltest)
-include_directories(inet4/tests/misc/lifecycle/lib)
-include_directories(inet4/tests/module/lib)
-include_directories(inet4/tests/module/lib/ieee80211)
-include_directories(inet4/tests/module/lib/ieee80211retransmissiontest)
 include_directories(inet4/tests/packet)
-include_directories(inet4/tests/unit/lib)
 
 add_executable(attack_simulator_net
         inet4/src/inet/applications/base/ApplicationBase.cc
         inet4/src/inet/applications/base/ApplicationBase.h
-        inet4/src/inet/applications/base/ApplicationPacket_m.cc
-        inet4/src/inet/applications/base/ApplicationPacket_m.h
         inet4/src/inet/applications/base/ApplicationPacketSerializer.cc
         inet4/src/inet/applications/base/ApplicationPacketSerializer.h
-        inet4/src/inet/applications/common/SocketTag_m.cc
-        inet4/src/inet/applications/common/SocketTag_m.h
         inet4/src/inet/applications/dhcp/DhcpClient.cc
         inet4/src/inet/applications/dhcp/DhcpClient.h
         inet4/src/inet/applications/dhcp/DhcpLease.h
-        inet4/src/inet/applications/dhcp/DhcpMessage_m.cc
-        inet4/src/inet/applications/dhcp/DhcpMessage_m.h
         inet4/src/inet/applications/dhcp/DhcpServer.cc
         inet4/src/inet/applications/dhcp/DhcpServer.h
-        inet4/src/inet/applications/ethernet/EtherApp_m.cc
-        inet4/src/inet/applications/ethernet/EtherApp_m.h
         inet4/src/inet/applications/ethernet/EtherAppClient.cc
         inet4/src/inet/applications/ethernet/EtherAppClient.h
         inet4/src/inet/applications/ethernet/EtherAppServer.cc
@@ -265,10 +250,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/applications/httptools/browser/HttpBrowserBase.h
         inet4/src/inet/applications/httptools/browser/HttpBrowserDirect.cc
         inet4/src/inet/applications/httptools/browser/HttpBrowserDirect.h
-        inet4/src/inet/applications/httptools/common/HttpEventMessages_m.cc
-        inet4/src/inet/applications/httptools/common/HttpEventMessages_m.h
-        inet4/src/inet/applications/httptools/common/HttpMessages_m.cc
-        inet4/src/inet/applications/httptools/common/HttpMessages_m.h
         inet4/src/inet/applications/httptools/common/HttpNodeBase.cc
         inet4/src/inet/applications/httptools/common/HttpNodeBase.h
         inet4/src/inet/applications/httptools/common/HttpRandom.cc
@@ -293,15 +274,11 @@ add_executable(attack_simulator_net
         inet4/src/inet/applications/httptools/server/HttpServerEvilB.h
         inet4/src/inet/applications/netperfmeter/NetPerfMeter.cc
         inet4/src/inet/applications/netperfmeter/NetPerfMeter.h
-        inet4/src/inet/applications/netperfmeter/NetPerfMeter_m.cc
-        inet4/src/inet/applications/netperfmeter/NetPerfMeter_m.h
         inet4/src/inet/applications/packetdrill/lexer.cc
         inet4/src/inet/applications/packetdrill/PacketDrill.cc
         inet4/src/inet/applications/packetdrill/PacketDrill.h
         inet4/src/inet/applications/packetdrill/PacketDrillApp.cc
         inet4/src/inet/applications/packetdrill/PacketDrillApp.h
-        inet4/src/inet/applications/packetdrill/PacketDrillInfo_m.cc
-        inet4/src/inet/applications/packetdrill/PacketDrillInfo_m.h
         inet4/src/inet/applications/packetdrill/PacketDrillUtils.cc
         inet4/src/inet/applications/packetdrill/PacketDrillUtils.h
         inet4/src/inet/applications/packetdrill/parser.cc
@@ -320,8 +297,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/applications/sctpapp/SctpPeer.h
         inet4/src/inet/applications/sctpapp/SctpServer.cc
         inet4/src/inet/applications/sctpapp/SctpServer.h
-        inet4/src/inet/applications/tcpapp/GenericAppMsg_m.cc
-        inet4/src/inet/applications/tcpapp/GenericAppMsg_m.h
         inet4/src/inet/applications/tcpapp/GenericAppMsgSerializer.cc
         inet4/src/inet/applications/tcpapp/GenericAppMsgSerializer.h
         inet4/src/inet/applications/tcpapp/TcpAppBase.cc
@@ -358,8 +333,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/applications/udpapp/UdpVideoStreamClient.h
         inet4/src/inet/applications/udpapp/UdpVideoStreamServer.cc
         inet4/src/inet/applications/udpapp/UdpVideoStreamServer.h
-        inet4/src/inet/applications/voip/SimpleVoipPacket_m.cc
-        inet4/src/inet/applications/voip/SimpleVoipPacket_m.h
         inet4/src/inet/applications/voip/SimpleVoipReceiver.cc
         inet4/src/inet/applications/voip/SimpleVoipReceiver.h
         inet4/src/inet/applications/voip/SimpleVoipSender.cc
@@ -370,6 +343,7 @@ add_executable(attack_simulator_net
         inet4/src/inet/applications/voipstream/VoipStreamReceiver.h
         inet4/src/inet/applications/voipstream/VoipStreamSender.cc
         inet4/src/inet/applications/voipstream/VoipStreamSender.h
+        inet4/src/inet/attackengine/model/event/Event.hpp
         inet4/src/inet/common/checksum/EthernetCRC.cc
         inet4/src/inet/common/checksum/EthernetCRC.h
         inet4/src/inet/common/checksum/TcpIpChecksum.cc
@@ -459,8 +433,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/geometry/shape/Prism.h
         inet4/src/inet/common/geometry/shape/Sphere.cc
         inet4/src/inet/common/geometry/shape/Sphere.h
-        inet4/src/inet/common/geometry/Geometry_m.cc
-        inet4/src/inet/common/geometry/Geometry_m.h
         inet4/src/inet/common/lifecycle/ILifecycle.h
         inet4/src/inet/common/lifecycle/InterfaceOperations.cc
         inet4/src/inet/common/lifecycle/InterfaceOperations.h
@@ -499,8 +471,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/packet/chunk/BytesChunk.h
         inet4/src/inet/common/packet/chunk/Chunk.cc
         inet4/src/inet/common/packet/chunk/Chunk.h
-        inet4/src/inet/common/packet/chunk/Chunk_m.cc
-        inet4/src/inet/common/packet/chunk/Chunk_m.h
         inet4/src/inet/common/packet/chunk/cPacketChunk.cc
         inet4/src/inet/common/packet/chunk/cPacketChunk.h
         inet4/src/inet/common/packet/chunk/EmptyChunk.cc
@@ -553,20 +523,12 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/packet/tag/TagSet.h
         inet4/src/inet/common/packet/ChunkBuffer.cc
         inet4/src/inet/common/packet/ChunkBuffer.h
-        inet4/src/inet/common/packet/ChunkBuffer_m.cc
-        inet4/src/inet/common/packet/ChunkBuffer_m.h
         inet4/src/inet/common/packet/ChunkQueue.cc
         inet4/src/inet/common/packet/ChunkQueue.h
-        inet4/src/inet/common/packet/ChunkQueue_m.cc
-        inet4/src/inet/common/packet/ChunkQueue_m.h
         inet4/src/inet/common/packet/Message.cc
         inet4/src/inet/common/packet/Message.h
-        inet4/src/inet/common/packet/Message_m.cc
-        inet4/src/inet/common/packet/Message_m.h
         inet4/src/inet/common/packet/Packet.cc
         inet4/src/inet/common/packet/Packet.h
-        inet4/src/inet/common/packet/Packet_m.cc
-        inet4/src/inet/common/packet/Packet_m.h
         inet4/src/inet/common/packet/PacketFilter.cc
         inet4/src/inet/common/packet/PacketFilter.h
         inet4/src/inet/common/packet/ReassemblyBuffer.cc
@@ -592,8 +554,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/queue/OrdinalBasedDuplicator.h
         inet4/src/inet/common/queue/PacketQueue.cc
         inet4/src/inet/common/queue/PacketQueue.h
-        inet4/src/inet/common/queue/PacketQueue_m.cc
-        inet4/src/inet/common/queue/PacketQueue_m.h
         inet4/src/inet/common/queue/PassiveQueueBase.cc
         inet4/src/inet/common/queue/PassiveQueueBase.h
         inet4/src/inet/common/queue/PriorityScheduler.cc
@@ -621,8 +581,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/BitVector.cc
         inet4/src/inet/common/BitVector.h
         inet4/src/inet/common/ByteArray.cc
-        inet4/src/inet/common/ByteArray_m.cc
-        inet4/src/inet/common/ByteArray_m.h
         inet4/src/inet/common/ByteArrayBuffer.cc
         inet4/src/inet/common/ByteArrayBuffer.h
         inet4/src/inet/common/Compat.cc
@@ -634,8 +592,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/IInterfaceRegistrationListener.cc
         inet4/src/inet/common/IInterfaceRegistrationListener.h
         inet4/src/inet/common/INETDefs.h
-        inet4/src/inet/common/INETDefs_m.cc
-        inet4/src/inet/common/INETDefs_m.h
         inet4/src/inet/common/INETEndians.h
         inet4/src/inet/common/INETMath.h
         inet4/src/inet/common/INETUtils.cc
@@ -674,15 +630,10 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/precompiled.h
         inet4/src/inet/common/precompiled_debug.h
         inet4/src/inet/common/precompiled_release.h
-        inet4/src/inet/common/precompiled_release.h.pch
         inet4/src/inet/common/Protocol.cc
         inet4/src/inet/common/Protocol.h
-        inet4/src/inet/common/Protocol_m.cc
-        inet4/src/inet/common/Protocol_m.h
         inet4/src/inet/common/ProtocolGroup.cc
         inet4/src/inet/common/ProtocolGroup.h
-        inet4/src/inet/common/ProtocolTag_m.cc
-        inet4/src/inet/common/ProtocolTag_m.h
         inet4/src/inet/common/ProtocolTools.cc
         inet4/src/inet/common/ProtocolTools.h
         inet4/src/inet/common/Ptr.h
@@ -694,37 +645,23 @@ add_executable(attack_simulator_net
         inet4/src/inet/common/ShortBitVector.h
         inet4/src/inet/common/Simsignals.cc
         inet4/src/inet/common/Simsignals.h
-        inet4/src/inet/common/Simsignals_m.cc
-        inet4/src/inet/common/Simsignals_m.h
         inet4/src/inet/common/stlutils.h
         inet4/src/inet/common/StringFormat.cc
         inet4/src/inet/common/StringFormat.h
-        inet4/src/inet/common/TagBase_m.cc
-        inet4/src/inet/common/TagBase_m.h
-        inet4/src/inet/common/TimeTag_m.cc
-        inet4/src/inet/common/TimeTag_m.h
         inet4/src/inet/common/TlvOptions.cc
-        inet4/src/inet/common/TlvOptions_m.cc
-        inet4/src/inet/common/TlvOptions_m.h
         inet4/src/inet/common/Topology.cc
         inet4/src/inet/common/Topology.h
         inet4/src/inet/common/Units.h
-        inet4/src/inet/common/Units_m.cc
-        inet4/src/inet/common/Units_m.h
         inet4/src/inet/common/XMLUtils.cc
         inet4/src/inet/common/XMLUtils.h
         inet4/src/inet/environment/common/Material.cc
         inet4/src/inet/environment/common/Material.h
-        inet4/src/inet/environment/common/Material_m.cc
-        inet4/src/inet/environment/common/Material_m.h
         inet4/src/inet/environment/common/MaterialRegistry.cc
         inet4/src/inet/environment/common/MaterialRegistry.h
         inet4/src/inet/environment/common/PhysicalEnvironment.cc
         inet4/src/inet/environment/common/PhysicalEnvironment.h
         inet4/src/inet/environment/common/PhysicalObject.cc
         inet4/src/inet/environment/common/PhysicalObject.h
-        inet4/src/inet/environment/common/PhysicalObject_m.cc
-        inet4/src/inet/environment/common/PhysicalObject_m.h
         inet4/src/inet/environment/contract/IGround.h
         inet4/src/inet/environment/contract/IMaterial.h
         inet4/src/inet/environment/contract/IMaterialRegistry.h
@@ -741,8 +678,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/environment/objectcache/GridObjectCache.h
         inet4/src/inet/linklayer/acking/AckingMac.cc
         inet4/src/inet/linklayer/acking/AckingMac.h
-        inet4/src/inet/linklayer/acking/AckingMacHeader_m.cc
-        inet4/src/inet/linklayer/acking/AckingMacHeader_m.h
         inet4/src/inet/linklayer/acking/AckingMacHeaderSerializer.cc
         inet4/src/inet/linklayer/acking/AckingMacHeaderSerializer.h
         inet4/src/inet/linklayer/acking/AckingMacProtocolDissector.cc
@@ -751,45 +686,25 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/acking/AckingMacProtocolPrinter.h
         inet4/src/inet/linklayer/base/MacBase.cc
         inet4/src/inet/linklayer/base/MacBase.h
-        inet4/src/inet/linklayer/base/MacHeaderBase_m.cc
-        inet4/src/inet/linklayer/base/MacHeaderBase_m.h
         inet4/src/inet/linklayer/base/MacProtocolBase.cc
         inet4/src/inet/linklayer/base/MacProtocolBase.h
         inet4/src/inet/linklayer/bmac/BMac.cc
         inet4/src/inet/linklayer/bmac/BMac.h
-        inet4/src/inet/linklayer/bmac/BMacHeader_m.cc
-        inet4/src/inet/linklayer/bmac/BMacHeader_m.h
         inet4/src/inet/linklayer/bmac/BMacProtocolDissector.cc
         inet4/src/inet/linklayer/bmac/BMacProtocolDissector.h
         inet4/src/inet/linklayer/bmac/BMacProtocolPrinter.cc
         inet4/src/inet/linklayer/bmac/BMacProtocolPrinter.h
-        inet4/src/inet/linklayer/common/EtherType_m.cc
-        inet4/src/inet/linklayer/common/EtherType_m.h
         inet4/src/inet/linklayer/common/ExampleQosClassifier.cc
         inet4/src/inet/linklayer/common/ExampleQosClassifier.h
         inet4/src/inet/linklayer/common/FcsMode.cc
-        inet4/src/inet/linklayer/common/FcsMode_m.cc
-        inet4/src/inet/linklayer/common/FcsMode_m.h
         inet4/src/inet/linklayer/common/Ieee802Ctrl.h
-        inet4/src/inet/linklayer/common/Ieee802Ctrl_m.cc
-        inet4/src/inet/linklayer/common/Ieee802Ctrl_m.h
-        inet4/src/inet/linklayer/common/Ieee802SapTag_m.cc
-        inet4/src/inet/linklayer/common/Ieee802SapTag_m.h
-        inet4/src/inet/linklayer/common/InterfaceTag_m.cc
-        inet4/src/inet/linklayer/common/InterfaceTag_m.h
         inet4/src/inet/linklayer/common/MacAddress.cc
         inet4/src/inet/linklayer/common/MacAddress.h
-        inet4/src/inet/linklayer/common/MacAddress_m.cc
-        inet4/src/inet/linklayer/common/MacAddress_m.h
-        inet4/src/inet/linklayer/common/MacAddressTag_m.cc
-        inet4/src/inet/linklayer/common/MacAddressTag_m.h
         inet4/src/inet/linklayer/common/MacAddressType.cc
         inet4/src/inet/linklayer/common/MacAddressType.h
         inet4/src/inet/linklayer/common/RandomQosClassifier.cc
         inet4/src/inet/linklayer/common/RandomQosClassifier.h
         inet4/src/inet/linklayer/common/UserPriority.h
-        inet4/src/inet/linklayer/common/UserPriorityTag_m.cc
-        inet4/src/inet/linklayer/common/UserPriorityTag_m.h
         inet4/src/inet/linklayer/configurator/Ieee8021dInterfaceData.cc
         inet4/src/inet/linklayer/configurator/Ieee8021dInterfaceData.h
         inet4/src/inet/linklayer/configurator/L2NetworkConfigurator.cc
@@ -799,8 +714,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/contract/IMacProtocol.h
         inet4/src/inet/linklayer/csmaca/CsmaCaMac.cc
         inet4/src/inet/linklayer/csmaca/CsmaCaMac.h
-        inet4/src/inet/linklayer/csmaca/CsmaCaMacHeader_m.cc
-        inet4/src/inet/linklayer/csmaca/CsmaCaMacHeader_m.h
         inet4/src/inet/linklayer/csmaca/CsmaCaMacProtocolDissector.cc
         inet4/src/inet/linklayer/csmaca/CsmaCaMacProtocolDissector.h
         inet4/src/inet/linklayer/csmaca/CsmaCaMacProtocolPrinter.cc
@@ -816,8 +729,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ethernet/EtherBus.h
         inet4/src/inet/linklayer/ethernet/EtherEncap.cc
         inet4/src/inet/linklayer/ethernet/EtherEncap.h
-        inet4/src/inet/linklayer/ethernet/EtherFrame_m.cc
-        inet4/src/inet/linklayer/ethernet/EtherFrame_m.h
         inet4/src/inet/linklayer/ethernet/EtherFrameClassifier.cc
         inet4/src/inet/linklayer/ethernet/EtherFrameClassifier.h
         inet4/src/inet/linklayer/ethernet/EtherHub.cc
@@ -837,8 +748,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ethernet/EthernetProtocolDissector.h
         inet4/src/inet/linklayer/ethernet/EthernetProtocolPrinter.cc
         inet4/src/inet/linklayer/ethernet/EthernetProtocolPrinter.h
-        inet4/src/inet/linklayer/ethernet/EtherPhyFrame_m.cc
-        inet4/src/inet/linklayer/ethernet/EtherPhyFrame_m.h
         inet4/src/inet/linklayer/ext/Ext.cc
         inet4/src/inet/linklayer/ext/Ext.h
         inet4/src/inet/linklayer/ieee80211/mac/aggregation/BasicMpduAggregationPolicy.cc
@@ -1056,8 +965,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee80211/mac/statistics/BasicStatistics.h
         inet4/src/inet/linklayer/ieee80211/mac/Ds.cc
         inet4/src/inet/linklayer/ieee80211/mac/Ds.h
-        inet4/src/inet/linklayer/ieee80211/mac/Ieee80211Frame_m.cc
-        inet4/src/inet/linklayer/ieee80211/mac/Ieee80211Frame_m.h
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211Mac.cc
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211Mac.h
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211MacHeaderSerializer.cc
@@ -1066,8 +973,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211MacProtocolDissector.h
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211MacProtocolPrinter.cc
         inet4/src/inet/linklayer/ieee80211/mac/Ieee80211MacProtocolPrinter.h
-        inet4/src/inet/linklayer/ieee80211/mac/Ieee80211SubtypeTag_m.cc
-        inet4/src/inet/linklayer/ieee80211/mac/Ieee80211SubtypeTag_m.h
         inet4/src/inet/linklayer/ieee80211/mac/Rx.cc
         inet4/src/inet/linklayer/ieee80211/mac/Rx.h
         inet4/src/inet/linklayer/ieee80211/mac/Tx.cc
@@ -1084,8 +989,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtApSimplified.h
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtBase.cc
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtBase.h
-        inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtFrame_m.cc
-        inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtFrame_m.h
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtFrameSerializer.cc
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtFrameSerializer.h
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtProtocolDissector.cc
@@ -1096,20 +999,14 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtSta.h
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtStaSimplified.cc
         inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211MgmtStaSimplified.h
-        inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211Primitives_m.cc
-        inet4/src/inet/linklayer/ieee80211/mgmt/Ieee80211Primitives_m.h
         inet4/src/inet/linklayer/ieee80211/mib/Ieee80211Mib.cc
         inet4/src/inet/linklayer/ieee80211/mib/Ieee80211Mib.h
         inet4/src/inet/linklayer/ieee80211/portal/Ieee80211Portal.cc
         inet4/src/inet/linklayer/ieee80211/portal/Ieee80211Portal.h
         inet4/src/inet/linklayer/ieee802154/Ieee802154Mac.cc
         inet4/src/inet/linklayer/ieee802154/Ieee802154Mac.h
-        inet4/src/inet/linklayer/ieee802154/Ieee802154MacHeader_m.cc
-        inet4/src/inet/linklayer/ieee802154/Ieee802154MacHeader_m.h
         inet4/src/inet/linklayer/ieee802154/Ieee802154ProtocolDissector.cc
         inet4/src/inet/linklayer/ieee802154/Ieee802154ProtocolDissector.h
-        inet4/src/inet/linklayer/ieee8021d/common/Ieee8021dBpdu_m.cc
-        inet4/src/inet/linklayer/ieee8021d/common/Ieee8021dBpdu_m.h
         inet4/src/inet/linklayer/ieee8021d/common/StpBase.cc
         inet4/src/inet/linklayer/ieee8021d/common/StpBase.h
         inet4/src/inet/linklayer/ieee8021d/relay/Ieee8021dRelay.cc
@@ -1124,8 +1021,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee8021d/tester/StpTester.h
         inet4/src/inet/linklayer/ieee8022/Ieee8022Llc.cc
         inet4/src/inet/linklayer/ieee8022/Ieee8022Llc.h
-        inet4/src/inet/linklayer/ieee8022/Ieee8022LlcHeader_m.cc
-        inet4/src/inet/linklayer/ieee8022/Ieee8022LlcHeader_m.h
         inet4/src/inet/linklayer/ieee8022/Ieee8022LlcHeaderSerializer.cc
         inet4/src/inet/linklayer/ieee8022/Ieee8022LlcHeaderSerializer.h
         inet4/src/inet/linklayer/ieee8022/Ieee8022LlcProtocolDissector.cc
@@ -1134,8 +1029,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ieee8022/Ieee8022LlcProtocolPrinter.h
         inet4/src/inet/linklayer/lmac/LMac.cc
         inet4/src/inet/linklayer/lmac/LMac.h
-        inet4/src/inet/linklayer/lmac/LMacHeader_m.cc
-        inet4/src/inet/linklayer/lmac/LMacHeader_m.h
         inet4/src/inet/linklayer/lmac/LMacProtocolDissector.cc
         inet4/src/inet/linklayer/lmac/LMacProtocolDissector.h
         inet4/src/inet/linklayer/lmac/LMacProtocolPrinter.cc
@@ -1144,8 +1037,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/loopback/Loopback.h
         inet4/src/inet/linklayer/ppp/Ppp.cc
         inet4/src/inet/linklayer/ppp/Ppp.h
-        inet4/src/inet/linklayer/ppp/PppFrame_m.cc
-        inet4/src/inet/linklayer/ppp/PppFrame_m.h
         inet4/src/inet/linklayer/ppp/PppHeaderSerializer.cc
         inet4/src/inet/linklayer/ppp/PppHeaderSerializer.h
         inet4/src/inet/linklayer/ppp/PppProtocolDissector.cc
@@ -1154,20 +1045,14 @@ add_executable(attack_simulator_net
         inet4/src/inet/linklayer/ppp/PppProtocolPrinter.h
         inet4/src/inet/linklayer/shortcut/ShortcutMac.cc
         inet4/src/inet/linklayer/shortcut/ShortcutMac.h
-        inet4/src/inet/linklayer/shortcut/ShortcutMacHeader_m.cc
-        inet4/src/inet/linklayer/shortcut/ShortcutMacHeader_m.h
         inet4/src/inet/linklayer/shortcut/ShortcutMacProtocolDissector.cc
         inet4/src/inet/linklayer/shortcut/ShortcutMacProtocolDissector.h
         inet4/src/inet/linklayer/tun/Tun.cc
         inet4/src/inet/linklayer/tun/Tun.h
-        inet4/src/inet/linklayer/tun/TunControlInfo_m.cc
-        inet4/src/inet/linklayer/tun/TunControlInfo_m.h
         inet4/src/inet/linklayer/tun/TunSocket.cc
         inet4/src/inet/linklayer/tun/TunSocket.h
         inet4/src/inet/linklayer/xmac/XMac.cc
         inet4/src/inet/linklayer/xmac/XMac.h
-        inet4/src/inet/linklayer/xmac/XMacHeader_m.cc
-        inet4/src/inet/linklayer/xmac/XMacHeader_m.h
         inet4/src/inet/linklayer/xmac/XMacProtocolDissector.cc
         inet4/src/inet/linklayer/xmac/XMacProtocolDissector.h
         inet4/src/inet/linklayer/xmac/XMacProtocolPrinter.cc
@@ -1239,8 +1124,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/arp/ipv4/Arp.cc
         inet4/src/inet/networklayer/arp/ipv4/Arp.h
         inet4/src/inet/networklayer/arp/ipv4/ArpPacket.cc
-        inet4/src/inet/networklayer/arp/ipv4/ArpPacket_m.cc
-        inet4/src/inet/networklayer/arp/ipv4/ArpPacket_m.h
         inet4/src/inet/networklayer/arp/ipv4/ArpPacketSerializer.cc
         inet4/src/inet/networklayer/arp/ipv4/ArpPacketSerializer.h
         inet4/src/inet/networklayer/arp/ipv4/ArpProtocolDissector.cc
@@ -1251,41 +1134,23 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/arp/ipv4/GlobalArp.h
         inet4/src/inet/networklayer/base/NetworkProtocolBase.cc
         inet4/src/inet/networklayer/base/NetworkProtocolBase.h
-        inet4/src/inet/networklayer/common/DscpTag_m.cc
-        inet4/src/inet/networklayer/common/DscpTag_m.h
-        inet4/src/inet/networklayer/common/EchoPacket_m.cc
-        inet4/src/inet/networklayer/common/EchoPacket_m.h
         inet4/src/inet/networklayer/common/EchoProtocol.cc
         inet4/src/inet/networklayer/common/EchoProtocol.h
         inet4/src/inet/networklayer/common/EchoProtocolDissector.cc
         inet4/src/inet/networklayer/common/EchoProtocolDissector.h
         inet4/src/inet/networklayer/common/EchoProtocolPrinter.cc
         inet4/src/inet/networklayer/common/EchoProtocolPrinter.h
-        inet4/src/inet/networklayer/common/EcnTag_m.cc
-        inet4/src/inet/networklayer/common/EcnTag_m.h
-        inet4/src/inet/networklayer/common/FragmentationTag_m.cc
-        inet4/src/inet/networklayer/common/FragmentationTag_m.h
-        inet4/src/inet/networklayer/common/HopLimitTag_m.cc
-        inet4/src/inet/networklayer/common/HopLimitTag_m.h
         inet4/src/inet/networklayer/common/InterfaceEntry.cc
         inet4/src/inet/networklayer/common/InterfaceEntry.h
-        inet4/src/inet/networklayer/common/InterfaceEntry_m.cc
-        inet4/src/inet/networklayer/common/InterfaceEntry_m.h
         inet4/src/inet/networklayer/common/InterfaceMatcher.cc
         inet4/src/inet/networklayer/common/InterfaceMatcher.h
         inet4/src/inet/networklayer/common/InterfaceTable.cc
         inet4/src/inet/networklayer/common/InterfaceTable.h
         inet4/src/inet/networklayer/common/InterfaceToken.h
-        inet4/src/inet/networklayer/common/IpProtocolId_m.cc
-        inet4/src/inet/networklayer/common/IpProtocolId_m.h
         inet4/src/inet/networklayer/common/L3Address.cc
         inet4/src/inet/networklayer/common/L3Address.h
-        inet4/src/inet/networklayer/common/L3Address_m.cc
-        inet4/src/inet/networklayer/common/L3Address_m.h
         inet4/src/inet/networklayer/common/L3AddressResolver.cc
         inet4/src/inet/networklayer/common/L3AddressResolver.h
-        inet4/src/inet/networklayer/common/L3AddressTag_m.cc
-        inet4/src/inet/networklayer/common/L3AddressTag_m.h
         inet4/src/inet/networklayer/common/L3Tools.cc
         inet4/src/inet/networklayer/common/L3Tools.h
         inet4/src/inet/networklayer/common/ModuleIdAddress.cc
@@ -1296,11 +1161,7 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/common/ModulePathAddress.h
         inet4/src/inet/networklayer/common/ModulePathAddressType.cc
         inet4/src/inet/networklayer/common/ModulePathAddressType.h
-        inet4/src/inet/networklayer/common/MulticastTag_m.cc
-        inet4/src/inet/networklayer/common/MulticastTag_m.h
         inet4/src/inet/networklayer/common/NetfilterInfoHook.cc
-        inet4/src/inet/networklayer/common/NextHopAddressTag_m.cc
-        inet4/src/inet/networklayer/common/NextHopAddressTag_m.h
         inet4/src/inet/networklayer/configurator/base/NetworkConfiguratorBase.cc
         inet4/src/inet/networklayer/configurator/base/NetworkConfiguratorBase.h
         inet4/src/inet/networklayer/configurator/ipv4/HostAutoConfigurator.cc
@@ -1317,25 +1178,17 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/configurator/nexthop/NextHopNetworkConfigurator.h
         inet4/src/inet/networklayer/contract/ipv4/Ipv4Address.cc
         inet4/src/inet/networklayer/contract/ipv4/Ipv4Address.h
-        inet4/src/inet/networklayer/contract/ipv4/Ipv4Address_m.cc
-        inet4/src/inet/networklayer/contract/ipv4/Ipv4Address_m.h
         inet4/src/inet/networklayer/contract/ipv4/Ipv4AddressType.cc
         inet4/src/inet/networklayer/contract/ipv4/Ipv4AddressType.h
         inet4/src/inet/networklayer/contract/ipv4/Ipv4Socket.cc
         inet4/src/inet/networklayer/contract/ipv4/Ipv4Socket.h
-        inet4/src/inet/networklayer/contract/ipv4/Ipv4SocketCommand_m.cc
-        inet4/src/inet/networklayer/contract/ipv4/Ipv4SocketCommand_m.h
         inet4/src/inet/networklayer/contract/ipv6/Ipv6Address.cc
         inet4/src/inet/networklayer/contract/ipv6/Ipv6Address.h
-        inet4/src/inet/networklayer/contract/ipv6/Ipv6Address_m.cc
-        inet4/src/inet/networklayer/contract/ipv6/Ipv6Address_m.h
         inet4/src/inet/networklayer/contract/ipv6/Ipv6AddressType.cc
         inet4/src/inet/networklayer/contract/ipv6/Ipv6AddressType.h
         inet4/src/inet/networklayer/contract/ipv6/Ipv6Consts.h
         inet4/src/inet/networklayer/contract/ipv6/Ipv6Socket.cc
         inet4/src/inet/networklayer/contract/ipv6/Ipv6Socket.h
-        inet4/src/inet/networklayer/contract/ipv6/Ipv6SocketCommand_m.cc
-        inet4/src/inet/networklayer/contract/ipv6/Ipv6SocketCommand_m.h
         inet4/src/inet/networklayer/contract/IArp.cc
         inet4/src/inet/networklayer/contract/IArp.h
         inet4/src/inet/networklayer/contract/IInterfaceTable.h
@@ -1348,17 +1201,11 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/contract/IRoutingTable.h
         inet4/src/inet/networklayer/contract/L3Socket.cc
         inet4/src/inet/networklayer/contract/L3Socket.h
-        inet4/src/inet/networklayer/contract/L3SocketCommand_m.cc
-        inet4/src/inet/networklayer/contract/L3SocketCommand_m.h
         inet4/src/inet/networklayer/contract/NetworkHeaderBase.cc
-        inet4/src/inet/networklayer/contract/NetworkHeaderBase_m.cc
-        inet4/src/inet/networklayer/contract/NetworkHeaderBase_m.h
         inet4/src/inet/networklayer/diffserv/BehaviorAggregateClassifier.cc
         inet4/src/inet/networklayer/diffserv/BehaviorAggregateClassifier.h
         inet4/src/inet/networklayer/diffserv/DiffservUtil.cc
         inet4/src/inet/networklayer/diffserv/DiffservUtil.h
-        inet4/src/inet/networklayer/diffserv/Dscp_m.cc
-        inet4/src/inet/networklayer/diffserv/Dscp_m.h
         inet4/src/inet/networklayer/diffserv/DscpMarker.cc
         inet4/src/inet/networklayer/diffserv/DscpMarker.h
         inet4/src/inet/networklayer/diffserv/MultiFieldClassifier.cc
@@ -1371,24 +1218,18 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/diffserv/TwoRateThreeColorMeter.h
         inet4/src/inet/networklayer/flooding/Flooding.cc
         inet4/src/inet/networklayer/flooding/Flooding.h
-        inet4/src/inet/networklayer/flooding/FloodingHeader_m.cc
-        inet4/src/inet/networklayer/flooding/FloodingHeader_m.h
         inet4/src/inet/networklayer/flooding/FloodingProtocolDissector.cc
         inet4/src/inet/networklayer/flooding/FloodingProtocolDissector.h
         inet4/src/inet/networklayer/flooding/FloodingProtocolPrinter.cc
         inet4/src/inet/networklayer/flooding/FloodingProtocolPrinter.h
         inet4/src/inet/networklayer/icmpv6/Icmpv6.cc
         inet4/src/inet/networklayer/icmpv6/Icmpv6.h
-        inet4/src/inet/networklayer/icmpv6/Icmpv6Header_m.cc
-        inet4/src/inet/networklayer/icmpv6/Icmpv6Header_m.h
         inet4/src/inet/networklayer/icmpv6/Icmpv6HeaderSerializer.cc
         inet4/src/inet/networklayer/icmpv6/Icmpv6HeaderSerializer.h
         inet4/src/inet/networklayer/icmpv6/Icmpv6ProtocolDissector.cc
         inet4/src/inet/networklayer/icmpv6/Icmpv6ProtocolDissector.h
         inet4/src/inet/networklayer/icmpv6/Icmpv6ProtocolPrinter.cc
         inet4/src/inet/networklayer/icmpv6/Icmpv6ProtocolPrinter.h
-        inet4/src/inet/networklayer/icmpv6/Ipv6NdMessage_m.cc
-        inet4/src/inet/networklayer/icmpv6/Ipv6NdMessage_m.h
         inet4/src/inet/networklayer/icmpv6/Ipv6NeighbourCache.cc
         inet4/src/inet/networklayer/icmpv6/Ipv6NeighbourCache.h
         inet4/src/inet/networklayer/icmpv6/Ipv6NeighbourDiscovery.cc
@@ -1403,8 +1244,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv4/Icmp.cc
         inet4/src/inet/networklayer/ipv4/Icmp.h
         inet4/src/inet/networklayer/ipv4/IcmpHeader.h
-        inet4/src/inet/networklayer/ipv4/IcmpHeader_m.cc
-        inet4/src/inet/networklayer/ipv4/IcmpHeader_m.h
         inet4/src/inet/networklayer/ipv4/IcmpHeaderSerializer.cc
         inet4/src/inet/networklayer/ipv4/IcmpHeaderSerializer.h
         inet4/src/inet/networklayer/ipv4/IcmpProtocolDissector.cc
@@ -1414,8 +1253,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv4/IgmpHeaderSerializer.cc
         inet4/src/inet/networklayer/ipv4/IgmpHeaderSerializer.h
         inet4/src/inet/networklayer/ipv4/IgmpMessage.h
-        inet4/src/inet/networklayer/ipv4/IgmpMessage_m.cc
-        inet4/src/inet/networklayer/ipv4/IgmpMessage_m.h
         inet4/src/inet/networklayer/ipv4/IgmpProtocolDissector.cc
         inet4/src/inet/networklayer/ipv4/IgmpProtocolDissector.h
         inet4/src/inet/networklayer/ipv4/IgmpProtocolPrinter.cc
@@ -1430,8 +1267,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv4/Ipv4FragBuf.cc
         inet4/src/inet/networklayer/ipv4/Ipv4FragBuf.h
         inet4/src/inet/networklayer/ipv4/Ipv4Header.cc
-        inet4/src/inet/networklayer/ipv4/Ipv4Header_m.cc
-        inet4/src/inet/networklayer/ipv4/Ipv4Header_m.h
         inet4/src/inet/networklayer/ipv4/Ipv4HeaderSerializer.cc
         inet4/src/inet/networklayer/ipv4/Ipv4HeaderSerializer.h
         inet4/src/inet/networklayer/ipv4/Ipv4InterfaceData.cc
@@ -1442,8 +1277,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv4/Ipv4ProtocolPrinter.h
         inet4/src/inet/networklayer/ipv4/Ipv4Route.cc
         inet4/src/inet/networklayer/ipv4/Ipv4Route.h
-        inet4/src/inet/networklayer/ipv4/Ipv4Route_m.cc
-        inet4/src/inet/networklayer/ipv4/Ipv4Route_m.h
         inet4/src/inet/networklayer/ipv4/Ipv4RoutingTable.cc
         inet4/src/inet/networklayer/ipv4/Ipv4RoutingTable.h
         inet4/src/inet/networklayer/ipv4/NetworkInfo.cc
@@ -1455,17 +1288,11 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv6/headers/ip6.h
         inet4/src/inet/networklayer/ipv6/Ipv6.cc
         inet4/src/inet/networklayer/ipv6/Ipv6.h
-        inet4/src/inet/networklayer/ipv6/Ipv6ExtensionHeaders_m.cc
-        inet4/src/inet/networklayer/ipv6/Ipv6ExtensionHeaders_m.h
-        inet4/src/inet/networklayer/ipv6/Ipv6ExtHeaderTag_m.cc
-        inet4/src/inet/networklayer/ipv6/Ipv6ExtHeaderTag_m.h
         inet4/src/inet/networklayer/ipv6/Ipv6ExtHeaderTagBase.cc
         inet4/src/inet/networklayer/ipv6/Ipv6FragBuf.cc
         inet4/src/inet/networklayer/ipv6/Ipv6FragBuf.h
         inet4/src/inet/networklayer/ipv6/Ipv6Header.cc
         inet4/src/inet/networklayer/ipv6/Ipv6Header.h
-        inet4/src/inet/networklayer/ipv6/Ipv6Header_m.cc
-        inet4/src/inet/networklayer/ipv6/Ipv6Header_m.h
         inet4/src/inet/networklayer/ipv6/Ipv6HeaderSerializer.cc
         inet4/src/inet/networklayer/ipv6/Ipv6HeaderSerializer.h
         inet4/src/inet/networklayer/ipv6/Ipv6InterfaceData.cc
@@ -1482,8 +1309,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/ipv6tunneling/Ipv6Tunneling.h
         inet4/src/inet/networklayer/ldp/Ldp.cc
         inet4/src/inet/networklayer/ldp/Ldp.h
-        inet4/src/inet/networklayer/ldp/LdpPacket_m.cc
-        inet4/src/inet/networklayer/ldp/LdpPacket_m.h
         inet4/src/inet/networklayer/mpls/ConstType.h
         inet4/src/inet/networklayer/mpls/IIngressClassifier.h
         inet4/src/inet/networklayer/mpls/LibTable.cc
@@ -1491,14 +1316,10 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/mpls/Mpls.cc
         inet4/src/inet/networklayer/mpls/Mpls.h
         inet4/src/inet/networklayer/mpls/MplsPacket.cc
-        inet4/src/inet/networklayer/mpls/MplsPacket_m.cc
-        inet4/src/inet/networklayer/mpls/MplsPacket_m.h
         inet4/src/inet/networklayer/mpls/MplsProtocolDissector.cc
         inet4/src/inet/networklayer/mpls/MplsProtocolDissector.h
         inet4/src/inet/networklayer/nexthop/NextHopForwarding.cc
         inet4/src/inet/networklayer/nexthop/NextHopForwarding.h
-        inet4/src/inet/networklayer/nexthop/NextHopForwardingHeader_m.cc
-        inet4/src/inet/networklayer/nexthop/NextHopForwardingHeader_m.h
         inet4/src/inet/networklayer/nexthop/NextHopInterfaceData.cc
         inet4/src/inet/networklayer/nexthop/NextHopInterfaceData.h
         inet4/src/inet/networklayer/nexthop/NextHopProtocolDissector.cc
@@ -1513,47 +1334,27 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/probabilistic/AdaptiveProbabilisticBroadcast.h
         inet4/src/inet/networklayer/probabilistic/ProbabilisticBroadcast.cc
         inet4/src/inet/networklayer/probabilistic/ProbabilisticBroadcast.h
-        inet4/src/inet/networklayer/probabilistic/ProbabilisticBroadcastHeader_m.cc
-        inet4/src/inet/networklayer/probabilistic/ProbabilisticBroadcastHeader_m.h
         inet4/src/inet/networklayer/probabilistic/ProbabilisticProtocolDissector.cc
         inet4/src/inet/networklayer/probabilistic/ProbabilisticProtocolDissector.h
         inet4/src/inet/networklayer/probabilistic/ProbabilisticProtocolPrinter.cc
         inet4/src/inet/networklayer/probabilistic/ProbabilisticProtocolPrinter.h
-        inet4/src/inet/networklayer/rsvpte/IntServ_m.cc
-        inet4/src/inet/networklayer/rsvpte/IntServ_m.h
         inet4/src/inet/networklayer/rsvpte/IRsvpClassifier.h
         inet4/src/inet/networklayer/rsvpte/RsvpClassifier.cc
         inet4/src/inet/networklayer/rsvpte/RsvpClassifier.h
-        inet4/src/inet/networklayer/rsvpte/RsvpHelloMsg_m.cc
-        inet4/src/inet/networklayer/rsvpte/RsvpHelloMsg_m.h
-        inet4/src/inet/networklayer/rsvpte/RsvpPacket_m.cc
-        inet4/src/inet/networklayer/rsvpte/RsvpPacket_m.h
-        inet4/src/inet/networklayer/rsvpte/RsvpPathMsg_m.cc
-        inet4/src/inet/networklayer/rsvpte/RsvpPathMsg_m.h
         inet4/src/inet/networklayer/rsvpte/RsvpProtocolDissector.cc
         inet4/src/inet/networklayer/rsvpte/RsvpProtocolDissector.h
-        inet4/src/inet/networklayer/rsvpte/RsvpResvMsg_m.cc
-        inet4/src/inet/networklayer/rsvpte/RsvpResvMsg_m.h
         inet4/src/inet/networklayer/rsvpte/RsvpTe.cc
         inet4/src/inet/networklayer/rsvpte/RsvpTe.h
-        inet4/src/inet/networklayer/rsvpte/SignallingMsg_m.cc
-        inet4/src/inet/networklayer/rsvpte/SignallingMsg_m.h
         inet4/src/inet/networklayer/rsvpte/Utils.cc
         inet4/src/inet/networklayer/rsvpte/Utils.h
-        inet4/src/inet/networklayer/ted/LinkStatePacket_m.cc
-        inet4/src/inet/networklayer/ted/LinkStatePacket_m.h
         inet4/src/inet/networklayer/ted/LinkStateRouting.cc
         inet4/src/inet/networklayer/ted/LinkStateRouting.h
         inet4/src/inet/networklayer/ted/LsrProtocolDissector.cc
         inet4/src/inet/networklayer/ted/LsrProtocolDissector.h
         inet4/src/inet/networklayer/ted/Ted.cc
         inet4/src/inet/networklayer/ted/Ted.h
-        inet4/src/inet/networklayer/ted/Ted_m.cc
-        inet4/src/inet/networklayer/ted/Ted_m.h
         inet4/src/inet/networklayer/wiseroute/WiseRoute.cc
         inet4/src/inet/networklayer/wiseroute/WiseRoute.h
-        inet4/src/inet/networklayer/wiseroute/WiseRouteHeader_m.cc
-        inet4/src/inet/networklayer/wiseroute/WiseRouteHeader_m.h
         inet4/src/inet/networklayer/wiseroute/WiseRouteProtocolDissector.cc
         inet4/src/inet/networklayer/wiseroute/WiseRouteProtocolDissector.h
         inet4/src/inet/networklayer/wiseroute/WiseRouteProtocolPrinter.cc
@@ -1562,8 +1363,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/networklayer/xmipv6/BindingCache.h
         inet4/src/inet/networklayer/xmipv6/BindingUpdateList.cc
         inet4/src/inet/networklayer/xmipv6/BindingUpdateList.h
-        inet4/src/inet/networklayer/xmipv6/MobilityHeader_m.cc
-        inet4/src/inet/networklayer/xmipv6/MobilityHeader_m.h
         inet4/src/inet/networklayer/xmipv6/xMIPv6.cc
         inet4/src/inet/networklayer/xmipv6/xMIPv6.h
         inet4/src/inet/physicallayer/analogmodel/bitlevel/DimensionalSignalAnalogModel.cc
@@ -1592,14 +1391,10 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarNoise.h
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarReception.cc
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarReception.h
-        inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarReception_m.cc
-        inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarReception_m.h
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarSnir.cc
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarSnir.h
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarTransmission.cc
         inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarTransmission.h
-        inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarTransmission_m.cc
-        inet4/src/inet/physicallayer/analogmodel/packetlevel/ScalarTransmission_m.h
         inet4/src/inet/physicallayer/antenna/ConstantGainAntenna.cc
         inet4/src/inet/physicallayer/antenna/ConstantGainAntenna.h
         inet4/src/inet/physicallayer/antenna/CosineAntenna.cc
@@ -1639,8 +1434,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskDimensionalTransmission.h
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskDimensionalTransmitter.cc
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskDimensionalTransmitter.h
-        inet4/src/inet/physicallayer/apskradio/packetlevel/ApskPhyHeader_m.cc
-        inet4/src/inet/physicallayer/apskradio/packetlevel/ApskPhyHeader_m.h
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskProtocolDissector.cc
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskProtocolDissector.h
         inet4/src/inet/physicallayer/apskradio/packetlevel/ApskRadio.cc
@@ -1679,12 +1472,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/base/packetlevel/FlatReceiverBase.h
         inet4/src/inet/physicallayer/base/packetlevel/FlatReceptionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/FlatReceptionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/FlatReceptionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/FlatReceptionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/FlatTransmissionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/FlatTransmissionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/FlatTransmissionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/FlatTransmissionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/FlatTransmitterBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/FlatTransmitterBase.h
         inet4/src/inet/physicallayer/base/packetlevel/GfskModulationBase.cc
@@ -1701,12 +1490,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandReceiverBase.h
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandReceptionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandReceptionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/NarrowbandReceptionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/NarrowbandReceptionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmissionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmissionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmissionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmissionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmitterBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/NarrowbandTransmitterBase.h
         inet4/src/inet/physicallayer/base/packetlevel/NoiseBase.cc
@@ -1724,8 +1509,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/base/packetlevel/ReceiverBase.h
         inet4/src/inet/physicallayer/base/packetlevel/ReceptionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/ReceptionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/ReceptionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/ReceptionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/ScalarAnalogModelBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/ScalarAnalogModelBase.h
         inet4/src/inet/physicallayer/base/packetlevel/SnirBase.cc
@@ -1736,8 +1519,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/base/packetlevel/TracingObstacleLossBase.h
         inet4/src/inet/physicallayer/base/packetlevel/TransmissionBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/TransmissionBase.h
-        inet4/src/inet/physicallayer/base/packetlevel/TransmissionBase_m.cc
-        inet4/src/inet/physicallayer/base/packetlevel/TransmissionBase_m.h
         inet4/src/inet/physicallayer/base/packetlevel/TransmitterBase.cc
         inet4/src/inet/physicallayer/base/packetlevel/TransmitterBase.h
         inet4/src/inet/physicallayer/common/bitlevel/AdditiveScrambler.cc
@@ -1776,12 +1557,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/common/bitlevel/SignalSymbolModel.h
         inet4/src/inet/physicallayer/common/packetlevel/Arrival.cc
         inet4/src/inet/physicallayer/common/packetlevel/Arrival.h
-        inet4/src/inet/physicallayer/common/packetlevel/Arrival_m.cc
-        inet4/src/inet/physicallayer/common/packetlevel/Arrival_m.h
         inet4/src/inet/physicallayer/common/packetlevel/BandListening.cc
         inet4/src/inet/physicallayer/common/packetlevel/BandListening.h
-        inet4/src/inet/physicallayer/common/packetlevel/BandListening_m.cc
-        inet4/src/inet/physicallayer/common/packetlevel/BandListening_m.h
         inet4/src/inet/physicallayer/common/packetlevel/CommunicationLog.cc
         inet4/src/inet/physicallayer/common/packetlevel/CommunicationLog.h
         inet4/src/inet/physicallayer/common/packetlevel/Interference.cc
@@ -1800,10 +1577,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/common/packetlevel/ReceptionResult.h
         inet4/src/inet/physicallayer/common/packetlevel/Signal.cc
         inet4/src/inet/physicallayer/common/packetlevel/Signal.h
-        inet4/src/inet/physicallayer/common/packetlevel/Signal_m.cc
-        inet4/src/inet/physicallayer/common/packetlevel/Signal_m.h
-        inet4/src/inet/physicallayer/common/packetlevel/SignalTag_m.cc
-        inet4/src/inet/physicallayer/common/packetlevel/SignalTag_m.h
         inet4/src/inet/physicallayer/communicationcache/MapCommunicationCache.cc
         inet4/src/inet/physicallayer/communicationcache/MapCommunicationCache.h
         inet4/src/inet/physicallayer/communicationcache/ReferenceCommunicationCache.cc
@@ -1842,8 +1615,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/contract/packetlevel/IListeningDecision.h
         inet4/src/inet/physicallayer/contract/packetlevel/IMediumLimitCache.h
         inet4/src/inet/physicallayer/contract/packetlevel/IModulation.h
-        inet4/src/inet/physicallayer/contract/packetlevel/IModulation_m.cc
-        inet4/src/inet/physicallayer/contract/packetlevel/IModulation_m.h
         inet4/src/inet/physicallayer/contract/packetlevel/INeighborCache.h
         inet4/src/inet/physicallayer/contract/packetlevel/INoise.h
         inet4/src/inet/physicallayer/contract/packetlevel/IObstacleLoss.h
@@ -1869,8 +1640,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/contract/packetlevel/ITransmission.cc
         inet4/src/inet/physicallayer/contract/packetlevel/ITransmission.h
         inet4/src/inet/physicallayer/contract/packetlevel/ITransmitter.h
-        inet4/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.cc
-        inet4/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h
         inet4/src/inet/physicallayer/energyconsumer/StateBasedCcEnergyConsumer.cc
         inet4/src/inet/physicallayer/energyconsumer/StateBasedCcEnergyConsumer.h
         inet4/src/inet/physicallayer/energyconsumer/StateBasedEpEnergyConsumer.cc
@@ -1926,8 +1695,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211Band.h
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211Channel.cc
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211Channel.h
-        inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211Channel_m.cc
-        inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211Channel_m.h
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211DsssMode.cc
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211DsssMode.h
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211DsssOfdmMode.cc
@@ -1959,8 +1726,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211VhtMode.cc
         inet4/src/inet/physicallayer/ieee80211/mode/Ieee80211VhtMode.h
         inet4/src/inet/physicallayer/ieee80211/mode/IIeee80211Mode.h
-        inet4/src/inet/physicallayer/ieee80211/mode/IIeee80211Mode_m.cc
-        inet4/src/inet/physicallayer/ieee80211/mode/IIeee80211Mode_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/BerParseFile.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/BerParseFile.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/DsssErrorRateModel.cc
@@ -1973,18 +1738,12 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/Ieee80211NistErrorModel.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/Ieee80211YansErrorModel.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/errormodel/Ieee80211YansErrorModel.h
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ControlInfo_m.cc
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ControlInfo_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalReceiver.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalReceiver.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmission.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmission.h
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmission_m.cc
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmission_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmitter.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211DimensionalTransmitter.h
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211PhyHeader_m.cc
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211PhyHeader_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211PhyHeaderSerializer.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211PhyHeaderSerializer.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211PhyProtocolDissector.cc
@@ -1999,12 +1758,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarReceiver.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmission.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmission.h
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmission_m.cc
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmission_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmitter.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211ScalarTransmitter.h
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211Tag_m.cc
-        inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211Tag_m.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211TransmissionBase.cc
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211TransmissionBase.h
         inet4/src/inet/physicallayer/ieee80211/packetlevel/Ieee80211TransmitterBase.cc
@@ -2095,8 +1850,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/propagation/ConstantSpeedPropagation.h
         inet4/src/inet/physicallayer/propagation/ConstantTimePropagation.cc
         inet4/src/inet/physicallayer/propagation/ConstantTimePropagation.h
-        inet4/src/inet/physicallayer/shortcut/ShortcutPhyHeader_m.cc
-        inet4/src/inet/physicallayer/shortcut/ShortcutPhyHeader_m.h
         inet4/src/inet/physicallayer/shortcut/ShortcutPhyProtocolDissector.cc
         inet4/src/inet/physicallayer/shortcut/ShortcutPhyProtocolDissector.h
         inet4/src/inet/physicallayer/shortcut/ShortcutRadio.cc
@@ -2107,8 +1860,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/unitdisk/UnitDiskListening.h
         inet4/src/inet/physicallayer/unitdisk/UnitDiskNoise.cc
         inet4/src/inet/physicallayer/unitdisk/UnitDiskNoise.h
-        inet4/src/inet/physicallayer/unitdisk/UnitDiskPhyHeader_m.cc
-        inet4/src/inet/physicallayer/unitdisk/UnitDiskPhyHeader_m.h
         inet4/src/inet/physicallayer/unitdisk/UnitDiskProtocolDissector.cc
         inet4/src/inet/physicallayer/unitdisk/UnitDiskProtocolDissector.h
         inet4/src/inet/physicallayer/unitdisk/UnitDiskRadio.cc
@@ -2121,8 +1872,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/physicallayer/unitdisk/UnitDiskSnir.h
         inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmission.cc
         inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmission.h
-        inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmission_m.cc
-        inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmission_m.h
         inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmitter.cc
         inet4/src/inet/physicallayer/unitdisk/UnitDiskTransmitter.h
         inet4/src/inet/power/base/CcEnergySinkBase.cc
@@ -2186,19 +1935,13 @@ add_executable(attack_simulator_net
         inet4/src/inet/power/storage/SimpleEpEnergyStorage.h
         inet4/src/inet/routing/aodv/Aodv.cc
         inet4/src/inet/routing/aodv/Aodv.h
-        inet4/src/inet/routing/aodv/AodvControlPackets_m.cc
-        inet4/src/inet/routing/aodv/AodvControlPackets_m.h
         inet4/src/inet/routing/aodv/AodvRouteData.cc
         inet4/src/inet/routing/aodv/AodvRouteData.h
-        inet4/src/inet/routing/bgpv4/bgpmessage/BgpHeader_m.cc
-        inet4/src/inet/routing/bgpv4/bgpmessage/BgpHeader_m.h
         inet4/src/inet/routing/bgpv4/bgpmessage/BgpUpdate.cc
         inet4/src/inet/routing/bgpv4/bgpmessage/BgpUpdate.h
         inet4/src/inet/routing/bgpv4/Bgp.cc
         inet4/src/inet/routing/bgpv4/Bgp.h
         inet4/src/inet/routing/bgpv4/BgpCommon.h
-        inet4/src/inet/routing/bgpv4/BgpCommon_m.cc
-        inet4/src/inet/routing/bgpv4/BgpCommon_m.h
         inet4/src/inet/routing/bgpv4/BgpFsm.cc
         inet4/src/inet/routing/bgpv4/BgpFsm.h
         inet4/src/inet/routing/bgpv4/BgpRoutingTableEntry.h
@@ -2208,19 +1951,13 @@ add_executable(attack_simulator_net
         inet4/src/inet/routing/common/ManetProtocolDissector.h
         inet4/src/inet/routing/dsdv/Dsdv.cc
         inet4/src/inet/routing/dsdv/Dsdv.h
-        inet4/src/inet/routing/dsdv/DsdvHello_m.cc
-        inet4/src/inet/routing/dsdv/DsdvHello_m.h
         inet4/src/inet/routing/dymo/Dymo.cc
         inet4/src/inet/routing/dymo/Dymo.h
-        inet4/src/inet/routing/dymo/Dymo_m.cc
-        inet4/src/inet/routing/dymo/Dymo_m.h
         inet4/src/inet/routing/dymo/DymoDefs.h
         inet4/src/inet/routing/dymo/DymoRouteData.cc
         inet4/src/inet/routing/dymo/DymoRouteData.h
         inet4/src/inet/routing/gpsr/Gpsr.cc
         inet4/src/inet/routing/gpsr/Gpsr.h
-        inet4/src/inet/routing/gpsr/Gpsr_m.cc
-        inet4/src/inet/routing/gpsr/Gpsr_m.h
         inet4/src/inet/routing/gpsr/GpsrDefs.h
         inet4/src/inet/routing/gpsr/PositionTable.cc
         inet4/src/inet/routing/gpsr/PositionTable.h
@@ -2292,8 +2029,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/routing/ospfv2/Ospf.h
         inet4/src/inet/routing/ospfv2/OspfConfigReader.cc
         inet4/src/inet/routing/ospfv2/OspfConfigReader.h
-        inet4/src/inet/routing/ospfv2/OspfPacket_m.cc
-        inet4/src/inet/routing/ospfv2/OspfPacket_m.h
         inet4/src/inet/routing/ospfv2/OspfProtocolDissector.cc
         inet4/src/inet/routing/ospfv2/OspfProtocolDissector.h
         inet4/src/inet/routing/ospfv2/OspfTimer.h
@@ -2307,16 +2042,12 @@ add_executable(attack_simulator_net
         inet4/src/inet/routing/pim/tables/PimInterfaceTable.h
         inet4/src/inet/routing/pim/tables/PimNeighborTable.cc
         inet4/src/inet/routing/pim/tables/PimNeighborTable.h
-        inet4/src/inet/routing/pim/PimPacket_m.cc
-        inet4/src/inet/routing/pim/PimPacket_m.h
         inet4/src/inet/routing/pim/PimProtocolDissector.cc
         inet4/src/inet/routing/pim/PimProtocolDissector.h
         inet4/src/inet/routing/pim/PimSplitter.cc
         inet4/src/inet/routing/pim/PimSplitter.h
         inet4/src/inet/routing/rip/Rip.cc
         inet4/src/inet/routing/rip/Rip.h
-        inet4/src/inet/routing/rip/RipPacket_m.cc
-        inet4/src/inet/routing/rip/RipPacket_m.h
         inet4/src/inet/routing/rip/RipPacketSerializer.cc
         inet4/src/inet/routing/rip/RipPacketSerializer.h
         inet4/src/inet/routing/rip/RipProtocolDissector.cc
@@ -2328,62 +2059,34 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/base/TransportProtocolBase.cc
         inet4/src/inet/transportlayer/base/TransportProtocolBase.h
         inet4/src/inet/transportlayer/common/CrcMode.cc
-        inet4/src/inet/transportlayer/common/CrcMode_m.cc
-        inet4/src/inet/transportlayer/common/CrcMode_m.h
-        inet4/src/inet/transportlayer/common/L4PortTag_m.cc
-        inet4/src/inet/transportlayer/common/L4PortTag_m.h
         inet4/src/inet/transportlayer/common/L4Tools.cc
         inet4/src/inet/transportlayer/common/L4Tools.h
-        inet4/src/inet/transportlayer/common/TransportPseudoHeader_m.cc
-        inet4/src/inet/transportlayer/common/TransportPseudoHeader_m.h
         inet4/src/inet/transportlayer/common/TransportPseudoHeaderSerializer.cc
         inet4/src/inet/transportlayer/common/TransportPseudoHeaderSerializer.h
         inet4/src/inet/transportlayer/contract/sctp/SctpCommand.h
-        inet4/src/inet/transportlayer/contract/sctp/SctpCommand_m.cc
-        inet4/src/inet/transportlayer/contract/sctp/SctpCommand_m.h
         inet4/src/inet/transportlayer/contract/sctp/SctpSocket.cc
         inet4/src/inet/transportlayer/contract/sctp/SctpSocket.h
-        inet4/src/inet/transportlayer/contract/tcp/TcpCommand_m.cc
-        inet4/src/inet/transportlayer/contract/tcp/TcpCommand_m.h
         inet4/src/inet/transportlayer/contract/tcp/TcpSocket.cc
         inet4/src/inet/transportlayer/contract/tcp/TcpSocket.h
         inet4/src/inet/transportlayer/contract/udp/UdpControlInfo.h
-        inet4/src/inet/transportlayer/contract/udp/UdpControlInfo_m.cc
-        inet4/src/inet/transportlayer/contract/udp/UdpControlInfo_m.h
         inet4/src/inet/transportlayer/contract/udp/UdpSocket.cc
         inet4/src/inet/transportlayer/contract/udp/UdpSocket.h
-        inet4/src/inet/transportlayer/contract/TransportHeaderBase_m.cc
-        inet4/src/inet/transportlayer/contract/TransportHeaderBase_m.h
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfile.cc
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfile.h
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfilePayload32Receiver.cc
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfilePayload32Receiver.h
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfilePayload32Sender.cc
         inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpAvProfilePayload32Sender.h
-        inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpMpegPacket_m.cc
-        inet4/src/inet/transportlayer/rtp/profiles/avprofile/RtpMpegPacket_m.h
         inet4/src/inet/transportlayer/rtp/Reports.cc
-        inet4/src/inet/transportlayer/rtp/Reports_m.cc
-        inet4/src/inet/transportlayer/rtp/Reports_m.h
         inet4/src/inet/transportlayer/rtp/Rtcp.cc
         inet4/src/inet/transportlayer/rtp/Rtcp.h
         inet4/src/inet/transportlayer/rtp/RtcpPacket.cc
-        inet4/src/inet/transportlayer/rtp/RtcpPacket_m.cc
-        inet4/src/inet/transportlayer/rtp/RtcpPacket_m.h
         inet4/src/inet/transportlayer/rtp/Rtp.cc
         inet4/src/inet/transportlayer/rtp/Rtp.h
         inet4/src/inet/transportlayer/rtp/RtpInnerPacket.cc
-        inet4/src/inet/transportlayer/rtp/RtpInnerPacket_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpInnerPacket_m.h
-        inet4/src/inet/transportlayer/rtp/RtpInterfacePacket_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpInterfacePacket_m.h
         inet4/src/inet/transportlayer/rtp/RtpPacket.cc
-        inet4/src/inet/transportlayer/rtp/RtpPacket_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpPacket_m.h
         inet4/src/inet/transportlayer/rtp/RtpParticipantInfo.cc
         inet4/src/inet/transportlayer/rtp/RtpParticipantInfo.h
-        inet4/src/inet/transportlayer/rtp/RtpParticipantInfo_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpParticipantInfo_m.h
         inet4/src/inet/transportlayer/rtp/RtpPayloadReceiver.cc
         inet4/src/inet/transportlayer/rtp/RtpPayloadReceiver.h
         inet4/src/inet/transportlayer/rtp/RtpPayloadSender.cc
@@ -2392,12 +2095,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/rtp/RtpProfile.h
         inet4/src/inet/transportlayer/rtp/RtpReceiverInfo.cc
         inet4/src/inet/transportlayer/rtp/RtpReceiverInfo.h
-        inet4/src/inet/transportlayer/rtp/RtpSenderControlMessage_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpSenderControlMessage_m.h
         inet4/src/inet/transportlayer/rtp/RtpSenderInfo.cc
         inet4/src/inet/transportlayer/rtp/RtpSenderInfo.h
-        inet4/src/inet/transportlayer/rtp/RtpSenderStatusMessage_m.cc
-        inet4/src/inet/transportlayer/rtp/RtpSenderStatusMessage_m.h
         inet4/src/inet/transportlayer/rtp/Sdes.cc
         inet4/src/inet/transportlayer/rtp/Sdes.h
         inet4/src/inet/transportlayer/sctp/headers/sctphdr.h
@@ -2423,8 +2122,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/sctp/SctpGapList.h
         inet4/src/inet/transportlayer/sctp/SctpHeader.cc
         inet4/src/inet/transportlayer/sctp/SctpHeader.h
-        inet4/src/inet/transportlayer/sctp/SctpHeader_m.cc
-        inet4/src/inet/transportlayer/sctp/SctpHeader_m.h
         inet4/src/inet/transportlayer/sctp/SctpHeaderSerializer.cc
         inet4/src/inet/transportlayer/sctp/SctpHeaderSerializer.h
         inet4/src/inet/transportlayer/sctp/SctpNatHook.cc
@@ -2468,8 +2165,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/tcp/Tcp.h
         inet4/src/inet/transportlayer/tcp/TcpAlgorithm.h
         inet4/src/inet/transportlayer/tcp/TcpConnection.h
-        inet4/src/inet/transportlayer/tcp/TcpConnection_m.cc
-        inet4/src/inet/transportlayer/tcp/TcpConnection_m.h
         inet4/src/inet/transportlayer/tcp/TcpConnectionBase.cc
         inet4/src/inet/transportlayer/tcp/TcpConnectionEventProc.cc
         inet4/src/inet/transportlayer/tcp/TcpConnectionRcvSegment.cc
@@ -2487,8 +2182,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/tcp_common/TcpDoc.h
         inet4/src/inet/transportlayer/tcp_common/TcpHeader.cc
         inet4/src/inet/transportlayer/tcp_common/TcpHeader.h
-        inet4/src/inet/transportlayer/tcp_common/TcpHeader_m.cc
-        inet4/src/inet/transportlayer/tcp_common/TcpHeader_m.h
         inet4/src/inet/transportlayer/tcp_common/TcpHeaderSerializer.cc
         inet4/src/inet/transportlayer/tcp_common/TcpHeaderSerializer.h
         inet4/src/inet/transportlayer/tcp_common/TcpProtocolDissector.cc
@@ -2502,46 +2195,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/tcp_lwip/lwip/core/tcp.cc
         inet4/src/inet/transportlayer/tcp_lwip/lwip/core/tcp_in.cc
         inet4/src/inet/transportlayer/tcp_lwip/lwip/core/tcp_out.cc
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch/bpstruct.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch/cc.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch/epstruct.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch/perf.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/arch/sys_arch.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/autoip.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/inet.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/inet_chksum.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/ip_addr.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/ip_frag.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/lwip_icmp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/lwip_igmp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/ipv4/lwip/lwip_ip.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/api.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/api_msg.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/arch.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/debug.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/def.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/dhcp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/err.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/lwip_tcp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/lwip_udp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/mem.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/memp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/memp_std.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/netbuf.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/netif.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/netifapi.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/opt.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/pbuf.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/raw.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/snmp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/stats.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/sys.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwip/tcpip.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/netif/etharp.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/netif/loopif.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/netif/ppp_oe.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/netif/slipif.h
-        inet4/src/inet/transportlayer/tcp_lwip/lwip/include/lwipopts.h
         inet4/src/inet/transportlayer/tcp_lwip/queues/TcpLwipQueues.cc
         inet4/src/inet/transportlayer/tcp_lwip/queues/TcpLwipQueues.h
         inet4/src/inet/transportlayer/tcp_lwip/LwipTcpLayer.cc
@@ -2560,8 +2213,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/transportlayer/udp/Udp.cc
         inet4/src/inet/transportlayer/udp/Udp.h
         inet4/src/inet/transportlayer/udp/UdpHeader.cc
-        inet4/src/inet/transportlayer/udp/UdpHeader_m.cc
-        inet4/src/inet/transportlayer/udp/UdpHeader_m.h
         inet4/src/inet/transportlayer/udp/UdpHeaderSerializer.cc
         inet4/src/inet/transportlayer/udp/UdpHeaderSerializer.h
         inet4/src/inet/transportlayer/udp/UdpProtocolDissector.cc
@@ -2592,8 +2243,6 @@ add_executable(attack_simulator_net
         inet4/src/inet/visualizer/base/NetworkConnectionVisualizerBase.h
         inet4/src/inet/visualizer/base/NetworkNodeVisualizerBase.cc
         inet4/src/inet/visualizer/base/NetworkNodeVisualizerBase.h
-        inet4/src/inet/visualizer/base/PacketDrop_m.cc
-        inet4/src/inet/visualizer/base/PacketDrop_m.h
         inet4/src/inet/visualizer/base/PacketDropVisualizerBase.cc
         inet4/src/inet/visualizer/base/PacketDropVisualizerBase.h
         inet4/src/inet/visualizer/base/PathCanvasVisualizerBase.cc
@@ -2736,43 +2385,8 @@ add_executable(attack_simulator_net
         inet4/src/inet/visualizer/util/PortFilter.h
         inet4/src/inet/visualizer/util/QueueFilter.cc
         inet4/src/inet/visualizer/util/QueueFilter.h
-        inet4/src/inet/features.h
         inet4/src/inet/index.h
-        inet4/src/inet/opp_defines.h
         inet4/tests/misc/dlltest/SomeUDPApp.cc
         inet4/tests/misc/dlltest/SomeUDPApp.h
-        inet4/tests/misc/lifecycle/lib/TestMobility.cc
-        inet4/tests/misc/lifecycle/lib/TestMobility.h
-        inet4/tests/misc/lifecycle/lib/TestOperation.cc
-        inet4/tests/misc/lifecycle/lib/TestOperation.h
-        inet4/tests/misc/lifecycle/lib/TestProtocol.cc
-        inet4/tests/misc/lifecycle/lib/TestProtocol.h
-        inet4/tests/misc/lifecycle/lib/TestRadio.cc
-        inet4/tests/misc/lifecycle/lib/TestRadio.h
-        inet4/tests/module/lib/ieee80211/Ieee80211BitDomainTest.cc
-        inet4/tests/module/lib/ieee80211/Ieee80211BitDomainTest.h
-        inet4/tests/module/lib/ieee80211/Ieee80211SymbolDomainTest.cc
-        inet4/tests/module/lib/ieee80211/Ieee80211SymbolDomainTest.h
-        inet4/tests/module/lib/ieee80211retransmissiontest/Ieee80211TesterMac.cc
-        inet4/tests/module/lib/ieee80211retransmissiontest/Ieee80211TesterMac.h
-        inet4/tests/module/lib/ieee80211retransmissiontest/MpduGen.cc
-        inet4/tests/module/lib/ieee80211retransmissiontest/MpduGen.h
-        inet4/tests/module/lib/EthTestApp.cc
-        inet4/tests/module/lib/IGMPTester.cc
-        inet4/tests/module/lib/MeterTestApp.cc
-        inet4/tests/module/lib/PacketLoggerChannel.cc
-        inet4/tests/module/lib/PolyhedronTest.cc
-        inet4/tests/module/lib/PolyhedronTest.h
-        inet4/tests/module/lib/QQ.cc
-        inet4/tests/module/lib/RadioTest.h
-        inet4/tests/module/lib/RoutingTableLogger.cc
-        inet4/tests/module/lib/TcpTestClient.cc
-        inet4/tests/module/lib/TCPTester.cc
-        inet4/tests/module/lib/TCPTester.h
-        inet4/tests/module/lib/TestIGMP.cc
         inet4/tests/packet/UnitTest.cc
-        inet4/tests/packet/UnitTest.h
-        inet4/tests/unit/lib/IntervalTreeTest.cc
-        inet4/tests/unit/lib/IntervalTreeTest.h
-        inet4/tests/unit/lib/TCPQueueTesterFunctions.cc
-        inet4/tests/unit/lib/TCPQueueTesterFunctions.h)
+        inet4/tests/packet/UnitTest.h inet4/src/inet/attackengine/model/event/ElementMisplace.cpp inet4/src/inet/attackengine/model/event/ElementMisplace.hpp)
