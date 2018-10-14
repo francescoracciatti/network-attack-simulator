@@ -32,8 +32,6 @@ std::ostream& operator<<(std::ostream& os, event_t type)
     switch ( type )
     {
         case event_t::ELEMENT_MISPLACE   : os << "ELEMENT_MISPLACE";    break;
-        case event_t::ELEMENT_ROTATE     : os << "ELEMENT_ROTATE";      break;
-        case event_t::ELEMENT_DECEIVE    : os << "ELEMENT_DECEIVE";     break;
         case event_t::ELEMENT_DISABLE    : os << "ELEMENT_DISABLE";     break;
         case event_t::ELEMENT_ENABLE     : os << "ELEMENT_ENABLE";      break;
         case event_t::ELEMENT_DESTROY    : os << "ELEMENT_DESTROY";     break;
@@ -56,6 +54,8 @@ public:
     virtual void execute() = 0;
 
     event_t getType() const { return type; };
+
+    virtual ~Event() {};
 
 protected:
     Event(event_t type) { this->type = type; }
