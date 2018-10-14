@@ -1,0 +1,14 @@
+//
+// Created by Francesco Racciatti on 14/10/2018.
+//
+
+#ifndef ATTACK_SIMULATOR_NET_EVENTMISPLACE_HPP
+#define ATTACK_SIMULATOR_NET_EVENTMISPLACE_HPP
+
+
+class EventMisplace {
+
+};
+
+
+#endif //ATTACK_SIMULATOR_NET_EVENTMISPLACE_HPP

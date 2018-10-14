@@ -3,6 +3,10 @@ project(attack_simulator_net)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
+include_directories(/Users/francescoracciatti/omnetpp-5.4.1/include)
+include_directories(/Users/francescoracciatti/omnetpp-5.4.1/include/omnetpp)
+include_directories(/Users/francescoracciatti/omnetpp-5.4.1/include/platdep)
 include_directories(src/inet)
 include_directories(src/inet/applications/base)
 include_directories(src/inet/applications/common)
@@ -2775,4 +2779,4 @@ add_executable(attack_simulator_net
         tests/unit/lib/IntervalTreeTest.cc
         tests/unit/lib/IntervalTreeTest.h
         tests/unit/lib/TCPQueueTesterFunctions.cc
-        tests/unit/lib/TCPQueueTesterFunctions.h)
+        tests/unit/lib/TCPQueueTesterFunctions.h src/inet/attackengine/model/event/EventMisplace.cpp src/inet/attackengine/model/event/EventMisplace.hpp)
