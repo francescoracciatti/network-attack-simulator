@@ -1,0 +1,6 @@
+# Attack simulator files
+src/attackengine/*
+
+# Modified INET's files
+src/mobility/base/MobilityBase.h
+src/mobility/base/MobilityBase.cc

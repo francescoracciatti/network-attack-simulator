@@ -21,6 +21,16 @@
 #include "inet/common/lifecycle/OperationalBase.h"
 #include "inet/common/lifecycle/NodeOperations.h"
 
+// =================================
+// REMOVE THE FOLLOWING DEPENDENCIES
+// =================================
+#warning "Remove dependencies, used for build test"
+#include "inet/attackengine/model/event/ElementMisplace.h"
+#include "inet/attackengine/model/event/ElementRotate.h"
+// =================================
+// =================================
+// =================================
+
 namespace inet {
 
 class INET_API ApplicationBase : public OperationalBase

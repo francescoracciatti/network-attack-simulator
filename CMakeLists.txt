@@ -2743,6 +2743,8 @@ add_executable(attack_simulator_net
         src/inet/features.h
         src/inet/index.h
         src/inet/opp_defines.h
+        src/inet/attackengine/model/event/ElementMisplace.cc
+        src/inet/attackengine/model/event/ElementMisplace.h
         tests/misc/dlltest/SomeUDPApp.cc
         tests/misc/dlltest/SomeUDPApp.h
         tests/misc/lifecycle/lib/TestMobility.cc
@@ -2779,4 +2781,4 @@ add_executable(attack_simulator_net
         tests/unit/lib/IntervalTreeTest.cc
         tests/unit/lib/IntervalTreeTest.h
         tests/unit/lib/TCPQueueTesterFunctions.cc
-        tests/unit/lib/TCPQueueTesterFunctions.h src/inet/attackengine/model/event/EventMisplace.cpp src/inet/attackengine/model/event/EventMisplace.hpp)
+        tests/unit/lib/TCPQueueTesterFunctions.h src/inet/attackengine/model/event/ElementRotate.cc src/inet/attackengine/model/event/ElementRotate.h src/inet/attackengine/model/event/Event.cc)

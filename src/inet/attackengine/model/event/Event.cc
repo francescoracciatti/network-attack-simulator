@@ -1,35 +1,18 @@
 //
-// Created by Francesco Racciatti on 13/10/2018.
+// Created by Francesco Racciatti on 15/10/2018.
 //
 
-#ifndef ATTACK_SIMULATOR_NET_EVENT_HPP
-#define ATTACK_SIMULATOR_NET_EVENT_HPP
+#include "Event.h"
 
-#include <iostream>
-
-namespace asnet
+namespace attack
 {
-
-enum class event_t
-{
-    ELEMENT_MISPLACE,
-    ELEMENT_DISABLE,
-    ELEMENT_ENABLE,
-    ELEMENT_DESTROY,
-    MESSAGE_WRITE,
-    MESSAGE_READ,
-    MESSAGE_FORWARD,
-    MESSAGE_INJECT,
-    MESSAGE_CREATE,
-    MESSAGE_CLONE,
-    MESSAGE_DROP
-};
 
 std::ostream& operator<<(std::ostream& os, event_t type)
 {
     switch ( type )
     {
         case event_t::ELEMENT_MISPLACE   : os << "ELEMENT_MISPLACE";    break;
+        case event_t::ELEMENT_ROTATE     : os << "ELEMENT_ROTATE";      break;
         case event_t::ELEMENT_DISABLE    : os << "ELEMENT_DISABLE";     break;
         case event_t::ELEMENT_ENABLE     : os << "ELEMENT_ENABLE";      break;
         case event_t::ELEMENT_DESTROY    : os << "ELEMENT_DESTROY";     break;
@@ -44,24 +27,18 @@ std::ostream& operator<<(std::ostream& os, event_t type)
     return os;
 }
 
-//
-// Base class to build events.
-//
-class Event {
-public:
-    virtual void execute() = 0;
-
-    event_t getType() const { return type; };
-
-    virtual ~Event() {};
-
-protected:
-    Event(event_t type) { this->type = type; }
-
-private:
-    event_t type;
-};
-
+Event::Event(attack::event_t type)
+        : type(type)
+{
 }
 
-#endif //ATTACK_SIMULATOR_NET_EVENT_HPP
+event_t Event::getType() const
+{
+    return type;
+}
+
+Event::~Event()
+{
+}
+
+}

@@ -179,6 +179,19 @@ class INET_API MobilityBase : public cSimpleModule, public IMobility
 
     virtual Coord getConstraintAreaMax() const override { return constraintAreaMax; }
     virtual Coord getConstraintAreaMin() const override { return constraintAreaMin; }
+
+  public:
+    /**
+     * @brief Simulates the effect of misplacement attacks by forcing the
+     * new position and the new constraint area (if needed).
+     */
+     void forcePosition(double x, double y, double z);
+
+    /**
+     * @brief Simulates the effect of rotation attacks by forcing the
+     * new angles.
+     */
+    virtual void forceRotation(rad alpha, rad beta, rad gamma);
 };
 
 } // namespace inet

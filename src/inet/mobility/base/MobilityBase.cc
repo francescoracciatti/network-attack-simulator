@@ -344,5 +344,31 @@ void MobilityBase::handleIfOutside(BorderPolicy policy, Coord& targetPosition, C
     }
 }
 
+void MobilityBase::forcePosition(double x, double y, double z)
+{
+    // Updates the constraint areas if needed
+    constraintAreaMin.x = x < constraintAreaMin.x ? x : constraintAreaMin.x;
+    constraintAreaMin.y = y < constraintAreaMin.y ? y : constraintAreaMin.y;
+    constraintAreaMin.z = z < constraintAreaMin.z ? z : constraintAreaMin.z;
+    constraintAreaMax.x = x > constraintAreaMax.x ? x : constraintAreaMax.x;
+    constraintAreaMax.y = y > constraintAreaMax.y ? y : constraintAreaMax.y;
+    constraintAreaMax.z = z > constraintAreaMax.z ? z : constraintAreaMax.z;
+
+    // Forces the new position
+    lastPosition.x = x;
+    lastPosition.y = y;
+    lastPosition.z = z;
+
+    emitMobilityStateChangedSignal();
+    refreshDisplay();
+}
+
+void MobilityBase::forceRotation(rad alpha, rad beta, rad gamma)
+{
+    lastOrientation.alpha = alpha;
+    lastOrientation.beta = beta;
+    lastOrientation.gamma = gamma;
+}
+
 } // namespace inet
 

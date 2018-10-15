@@ -77,6 +77,12 @@ class INET_API RotatingMobilityBase : public MobilityBase
 
     /** @brief Returns the current angular velocity at the current simulation time. */
     virtual EulerAngles getCurrentAngularVelocity() override;
+
+    /**
+     * @brief Simulates the effect of rotation attacks by forcing the
+     * new angles, and notifies listeners.
+     */
+    void forceRotation(rad alpha, rad beta, rad gamma) override;
 };
 
 } // namespace inet

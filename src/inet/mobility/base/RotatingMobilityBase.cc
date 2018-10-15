@@ -95,5 +95,13 @@ EulerAngles RotatingMobilityBase::getCurrentAngularVelocity()
     return lastAngularVelocity;
 }
 
+void RotatingMobilityBase::forceRotation(rad alpha, rad beta, rad gamma)
+{
+    lastOrientation.alpha = alpha;
+    lastOrientation.beta = beta;
+    lastOrientation.gamma = gamma;
+    rotateAndUpdate();
+}
+
 } // namespace inet
 
