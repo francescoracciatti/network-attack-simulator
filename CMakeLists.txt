@@ -2781,4 +2781,4 @@ add_executable(attack_simulator_net
         tests/unit/lib/IntervalTreeTest.cc
         tests/unit/lib/IntervalTreeTest.h
         tests/unit/lib/TCPQueueTesterFunctions.cc
-        tests/unit/lib/TCPQueueTesterFunctions.h src/inet/attackengine/model/event/ElementRotate.cc src/inet/attackengine/model/event/ElementRotate.h src/inet/attackengine/model/event/Event.cc)
+        tests/unit/lib/TCPQueueTesterFunctions.h src/inet/attackengine/model/event/ElementRotate.cc src/inet/attackengine/model/event/ElementRotate.h src/inet/attackengine/model/event/Event.cc src/inet/attackengine/model/event/ElementDisable.cc src/inet/attackengine/model/event/ElementDisable.h src/inet/applications/base/testcompile.h)

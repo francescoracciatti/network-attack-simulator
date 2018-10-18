@@ -19,7 +19,7 @@ class ElementMisplace : public Event {
 public:
     ElementMisplace(omnetpp::cModule* targetModule, double x, double y, double z);
 
-    virtual void execute() override;
+    void execute() override;
 
 private:
     omnetpp::cModule* targetModule;

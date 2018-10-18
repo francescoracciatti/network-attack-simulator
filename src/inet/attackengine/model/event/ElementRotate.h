@@ -21,7 +21,7 @@ public:
     ElementRotate(omnetpp::cModule* targetModule,
             inet::units::values::rad alpha, inet::units::values::rad beta, inet::units::values::rad gamma);
 
-    virtual void execute() override;
+    void execute() override;
 
 private:
     omnetpp::cModule* targetModule;

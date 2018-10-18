@@ -24,9 +24,8 @@
 // =================================
 // REMOVE THE FOLLOWING DEPENDENCIES
 // =================================
-#warning "Remove dependencies, used for build test"
-#include "inet/attackengine/model/event/ElementMisplace.h"
-#include "inet/attackengine/model/event/ElementRotate.h"
+#warning "Remove the following dependency, used for build test"
+#include "testcompile.h"
 // =================================
 // =================================
 // =================================
