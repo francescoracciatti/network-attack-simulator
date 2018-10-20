@@ -4,6 +4,8 @@
 
 #include "ElementDisable.h"
 
+#include "inet/attackengine/processor/node/LocalEventProcessor.h"
+
 namespace attack
 {
 
@@ -19,8 +21,10 @@ ElementDisable::ElementDisable(omnetpp::cModule* targetModule)
 
 void ElementDisable::execute()
 {
-    // TODO send a signal to the local event processor
+    LocalEventProcessor* localEventProcessor =
+            omnetpp::check_and_cast<LocalEventProcessor*> (
+                    targetModule->getSubmodule(LocalEventProcessor::getModuleName()));
+    localEventProcessor->disableElement();
 }
-
 
 }

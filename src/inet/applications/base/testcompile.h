@@ -5,11 +5,11 @@
 #ifndef ATTACK_SIMULATOR_NET_TESTCOMPILE_H
 #define ATTACK_SIMULATOR_NET_TESTCOMPILE_H
 
-#warning "Remove this file, only used for test at compile time"
+#warning "Remove this file, only used for tests"
 
 #include "inet/attackengine/model/event/ElementMisplace.h"
 #include "inet/attackengine/model/event/ElementRotate.h"
 #include "inet/attackengine/model/event/ElementDisable.h"
-
+#include "inet/attackengine/processor/node/LocalEventProcessor.h"
 
 #endif //ATTACK_SIMULATOR_NET_TESTCOMPILE_H
