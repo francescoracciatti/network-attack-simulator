@@ -24,4 +24,9 @@ void LocalEventProcessor::disableElement()
     isElementDisabled = true;
 }
 
+void LocalEventProcessor::enableElement()
+{
+    isElementDisabled = false;
+}
+
 }

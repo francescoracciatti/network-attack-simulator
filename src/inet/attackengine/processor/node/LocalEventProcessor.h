@@ -18,6 +18,8 @@ public:
 
     void disableElement();
 
+    void enableElement();
+
 private:
     bool isElementDisabled;
 };
