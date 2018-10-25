@@ -28,6 +28,8 @@ class Attack {
 public:
     attack_t getType() const;
 
+    void appendEvent(std::unique_ptr<Event> event);
+
     virtual void execute(...) = 0;
 
 protected:

@@ -23,6 +23,11 @@ attack_t Attack::getType() const
     return type;
 }
 
+void Attack::appendEvent(std::unique_ptr<Event> event)
+{
+    events.push_back(std::move(event));
+}
+
 Attack::Attack(attack_t type)
         : type(type)
 {
