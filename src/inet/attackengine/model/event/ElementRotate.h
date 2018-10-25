@@ -2,8 +2,8 @@
 // Created by Francesco Racciatti on 15/10/2018.
 //
 
-#ifndef ATTACK_SIMULATOR_NET_ELEMENTROTATE_HPP
-#define ATTACK_SIMULATOR_NET_ELEMENTROTATE_HPP
+#ifndef ATTACK_SIMULATOR_NET_ELEMENTROTATE_H
+#define ATTACK_SIMULATOR_NET_ELEMENTROTATE_H
 
 #include "Event.h"
 
@@ -33,6 +33,6 @@ private:
     const inet::units::values::rad gamma;
 };
 
-}
+} /* namespace attack */
 
-#endif //ATTACK_SIMULATOR_NET_ELEMENTROTATE_HPP
+#endif //ATTACK_SIMULATOR_NET_ELEMENTROTATE_H

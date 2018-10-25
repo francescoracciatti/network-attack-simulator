@@ -27,4 +27,4 @@ void ElementDisable::execute()
     localEventProcessor->disableElement();
 }
 
-}
+} /* namespace attack */

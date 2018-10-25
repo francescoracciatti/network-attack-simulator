@@ -2,8 +2,8 @@
 // Created by Francesco Racciatti on 17/10/2018.
 //
 
-#ifndef ATTACK_SIMULATOR_NET_ELEMENTDISABLE_HPP
-#define ATTACK_SIMULATOR_NET_ELEMENTDISABLE_HPP
+#ifndef ATTACK_SIMULATOR_NET_ELEMENTDISABLE_H
+#define ATTACK_SIMULATOR_NET_ELEMENTDISABLE_H
 
 #include "Event.h"
 
@@ -25,6 +25,6 @@ private:
     omnetpp::cModule* targetModule;
 };
 
-}
+} /* namespace attack */
 
-#endif //ATTACK_SIMULATOR_NET_ELEMENTDISABLE_HPP
+#endif //ATTACK_SIMULATOR_NET_ELEMENTDISABLE_H

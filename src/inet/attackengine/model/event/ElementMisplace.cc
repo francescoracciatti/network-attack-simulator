@@ -28,4 +28,4 @@ void ElementMisplace::execute()
     }
 }
 
-}
+} /* namespace attack */

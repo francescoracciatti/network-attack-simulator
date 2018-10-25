@@ -2,8 +2,8 @@
 // Created by Francesco Racciatti on 13/10/2018.
 //
 
-#ifndef ATTACK_SIMULATOR_NET_EVENT_HPP
-#define ATTACK_SIMULATOR_NET_EVENT_HPP
+#ifndef ATTACK_SIMULATOR_NET_EVENT_H
+#define ATTACK_SIMULATOR_NET_EVENT_H
 
 #include <iostream>
 
@@ -12,6 +12,7 @@ namespace attack
 
 enum class event_t
 {
+    EXPRESSION,
     ELEMENT_MISPLACE,
     ELEMENT_ROTATE,
     ELEMENT_DISABLE,
@@ -48,4 +49,4 @@ private:
 
 } /* namespace attack */
 
-#endif //ATTACK_SIMULATOR_NET_EVENT_HPP
+#endif //ATTACK_SIMULATOR_NET_EVENT_H

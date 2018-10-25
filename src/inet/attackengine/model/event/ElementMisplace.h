@@ -2,8 +2,8 @@
 // Created by Francesco Racciatti on 14/10/2018.
 //
 
-#ifndef ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_HPP
-#define ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_HPP
+#ifndef ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_H
+#define ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_H
 
 #include "Event.h"
 
@@ -31,6 +31,6 @@ private:
     const double z;
 };
 
-}
+} /* namespace attack */
 
-#endif //ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_HPP
+#endif //ATTACK_SIMULATOR_NET_ELEMENTMISPLACE_H

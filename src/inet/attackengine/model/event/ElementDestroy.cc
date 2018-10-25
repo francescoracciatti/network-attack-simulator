@@ -1,16 +1,16 @@
 //
-// Created by Francesco Racciatti on 20/10/2018.
+// Created by Francesco Racciatti on 21/10/2018.
 //
 
-#include "ElementEnable.h"
+#include "ElementDestroy.h"
 
 #include "inet/attackengine/processor/node/LocalEventProcessor.h"
 
 namespace attack
 {
 
-ElementEnable::ElementEnable(omnetpp::cModule* targetModule)
-        : Event(event_t::ELEMENT_ENABLE),
+ElementDestroy::ElementDestroy(omnetpp::cModule* targetModule)
+        : Event(event_t::ELEMENT_DESTROY),
           targetModule(targetModule)
 {
     if ( targetModule == nullptr )
@@ -19,12 +19,12 @@ ElementEnable::ElementEnable(omnetpp::cModule* targetModule)
     }
 }
 
-void ElementEnable::execute()
+void ElementDestroy::execute()
 {
     LocalEventProcessor* localEventProcessor =
             omnetpp::check_and_cast<LocalEventProcessor*> (
                     targetModule->getSubmodule(LocalEventProcessor::getModuleName()));
-    localEventProcessor->enableElement();
+    localEventProcessor->disableElement();
 }
 
 } /* namespace attack */

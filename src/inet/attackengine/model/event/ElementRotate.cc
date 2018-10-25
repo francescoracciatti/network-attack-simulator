@@ -36,4 +36,4 @@ void ElementRotate::execute()
     }
 }
 
-}
+} /* namespace attack */

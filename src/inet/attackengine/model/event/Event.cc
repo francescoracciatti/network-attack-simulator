@@ -11,6 +11,7 @@ std::ostream& operator<<(std::ostream& os, event_t type)
 {
     switch ( type )
     {
+        case event_t::EXPRESSION         : os << "EXPRESSION";          break;
         case event_t::ELEMENT_MISPLACE   : os << "ELEMENT_MISPLACE";    break;
         case event_t::ELEMENT_ROTATE     : os << "ELEMENT_ROTATE";      break;
         case event_t::ELEMENT_DISABLE    : os << "ELEMENT_DISABLE";     break;
@@ -41,4 +42,4 @@ Event::~Event()
 {
 }
 
-}
+} /* namespace attack */
