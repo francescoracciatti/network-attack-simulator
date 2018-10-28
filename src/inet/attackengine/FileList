@@ -1,6 +1,8 @@
 # Attack simulator files
-src/attackengine/*
+src/inet/attackengine/*
 
 # Modified INET's files
-src/mobility/base/MobilityBase.h
-src/mobility/base/MobilityBase.cc
+src/inet/mobility/base/MobilityBase.h
+src/inet/mobility/base/MobilityBase.cc
+src/inet/mobility/base/RotatingMobilityBase.h
+src/inet/mobility/base/RotatingMobilityBase.cc

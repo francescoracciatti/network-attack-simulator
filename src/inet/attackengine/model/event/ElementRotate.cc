@@ -27,11 +27,11 @@ void ElementRotate::execute()
     {
         try
         {
-            inet::check_and_cast<inet::RotatingMobilityBase*>(mobility)->forceRotation(alpha, beta, gamma);
+            omnetpp::check_and_cast<inet::RotatingMobilityBase*>(mobility)->forceRotation(alpha, beta, gamma);
         }
         catch ( ... )
         {
-            inet::check_and_cast<inet::MobilityBase*>(mobility)->forceRotation(alpha, beta, gamma);
+            omnetpp::check_and_cast<inet::MobilityBase*>(mobility)->forceRotation(alpha, beta, gamma);
         }
     }
 }

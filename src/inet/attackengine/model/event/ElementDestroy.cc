@@ -4,7 +4,7 @@
 
 #include "ElementDestroy.h"
 
-#include "inet/attackengine/processor/node/LocalEventProcessor.h"
+#include "inet/attackengine/processor/LocalEventProcessor.h"
 
 namespace attack
 {
@@ -22,7 +22,7 @@ ElementDestroy::ElementDestroy(omnetpp::cModule* targetModule)
 void ElementDestroy::execute()
 {
     LocalEventProcessor* localEventProcessor =
-            omnetpp::check_and_cast<LocalEventProcessor*> (
+            omnetpp::check_and_cast<LocalEventProcessor*>(
                     targetModule->getSubmodule(LocalEventProcessor::getModuleName()));
     localEventProcessor->disableElement();
 }

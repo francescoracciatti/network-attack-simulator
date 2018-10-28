@@ -4,7 +4,7 @@
 
 #include "ElementEnable.h"
 
-#include "inet/attackengine/processor/node/LocalEventProcessor.h"
+#include "inet/attackengine/processor/LocalEventProcessor.h"
 
 namespace attack
 {
@@ -22,7 +22,7 @@ ElementEnable::ElementEnable(omnetpp::cModule* targetModule)
 void ElementEnable::execute()
 {
     LocalEventProcessor* localEventProcessor =
-            omnetpp::check_and_cast<LocalEventProcessor*> (
+            omnetpp::check_and_cast<LocalEventProcessor*>(
                     targetModule->getSubmodule(LocalEventProcessor::getModuleName()));
     localEventProcessor->enableElement();
 }

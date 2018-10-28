@@ -24,7 +24,7 @@ void ElementMisplace::execute()
     omnetpp::cModule* mobility = targetModule->getSubmodule("mobility");
     if ( mobility != nullptr )
     {
-        inet::check_and_cast<inet::MobilityBase*>(mobility)->forcePosition(x, y, z);
+        omnetpp::check_and_cast<inet::MobilityBase*>(mobility)->forcePosition(x, y, z);
     }
 }
 
